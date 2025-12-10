@@ -301,7 +301,7 @@ router.get('/tenants/:id', async (req, res) => {
  */
 
 // Register user with DeafAUTH
-router.post('/auth/register', async (req, res) => {
+router.post('/auth/register', authRateLimiter, async (req, res) => {
   try {
     const user = await deafAuthService.registerUser(req.body);
     res.status(201).json({ success: true, data: user });
