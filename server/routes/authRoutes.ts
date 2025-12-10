@@ -284,7 +284,7 @@ router.post('/forgot-password', authRateLimiter, async (req: Request, res: Respo
       return;
     }
 
-    const result = await deafAuthService.requestPasswordReset(email);
+    await deafAuthService.requestPasswordReset(email);
 
     // Always return success to prevent email enumeration
     res.status(200).json({
