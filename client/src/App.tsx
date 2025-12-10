@@ -15,8 +15,7 @@ import {
   Map,
   Library,
   BookMarked,
-  Building,
-  Home
+  Building
 } from 'lucide-react';
 
 // Import our components
@@ -28,7 +27,6 @@ import ProfilePage from '@/pages/profile-page';
 import TechLeadershipResources from '@/components/resources/TechLeadershipResources';
 import JourneyTrackerPage from '@/pages/journey-tracker-page';
 import ResourceLibraryPage from '@/pages/resource-library-page';
-import PropertyManagementPage from '@/pages/PropertyManagementPage';
 
 // Business Pathway Pages
 import BusinessPathwayPage from '@/pages/pathways/business';
@@ -71,13 +69,6 @@ export default function App() {
               text="Business Pathway" 
               collapsed={navCollapsed} 
               active={location.includes('/pathways/business')} 
-            />
-            <NavItem 
-              to="/property-management" 
-              icon={<Home className="h-5 w-5" />} 
-              text="Property Management" 
-              collapsed={navCollapsed} 
-              active={location === '/property-management'} 
             />
             <NavItem 
               to="/analytics" 
@@ -173,7 +164,6 @@ export default function App() {
           <Route path="/pathways/business/build" component={BusinessBuildPage} />
           <Route path="/pathways/business/grow" component={BusinessGrowPage} />
           <Route path="/pathways/business/manage" component={BusinessManagePage} />
-          <Route path="/property-management" component={PropertyManagementPage} />
           <Route path="/analytics" component={AIBusinessAnalytics} />
           <Route path="/vr4deaf" component={VR4DeafDashboard} />
           <Route path="/job-support" component={JobSupportDashboard} />
