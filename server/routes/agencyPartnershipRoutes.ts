@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { db } from '../database';
-import { partnerAgencies, agencyClients, agencyServices, users, vrCounselors } from '../../shared/schema';
-import { eq, and, desc } from 'drizzle-orm';
+import { partnerAgencies, agencyClients, agencyServices, users, vrCounselors, insertPartnerAgencySchema, insertAgencyClientSchema, insertAgencyServiceSchema } from '../../shared/schema';
+import { eq, and, desc, inArray } from 'drizzle-orm';
+import { z } from 'zod';
 
 const router = Router();
 
@@ -12,14 +13,17 @@ router.get('/agencies', async (req, res) => {
   try {
     const { agencyType, isActive } = req.query;
     
-    let query = db.select().from(partnerAgencies);
-    
+    const conditions = [];
     if (agencyType) {
-      query = query.where(eq(partnerAgencies.agencyType, agencyType as string)) as any;
+      conditions.push(eq(partnerAgencies.agencyType, agencyType as string));
+    }
+    if (isActive !== undefined) {
+      conditions.push(eq(partnerAgencies.isActive, isActive === 'true'));
     }
     
-    if (isActive !== undefined) {
-      query = query.where(eq(partnerAgencies.isActive, isActive === 'true')) as any;
+    let query = db.select().from(partnerAgencies);
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions)) as any;
     }
     
     const agencies = await query.orderBy(desc(partnerAgencies.partnerSince));
@@ -68,10 +72,11 @@ router.get('/agencies/:id', async (req, res) => {
 // Register new partner agency
 router.post('/agencies', async (req, res) => {
   try {
-    const agencyData = req.body;
+    // Validate input
+    const validatedData = insertPartnerAgencySchema.parse(req.body);
     
     const newAgency = await db.insert(partnerAgencies)
-      .values(agencyData)
+      .values(validatedData)
       .returning();
     
     res.status(201).json({
@@ -80,6 +85,13 @@ router.post('/agencies', async (req, res) => {
       message: 'Partner agency registered successfully'
     });
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        details: error.errors
+      });
+    }
     res.status(500).json({
       success: false,
       error: error.message
@@ -129,7 +141,12 @@ router.get('/agencies/:agencyId/clients', async (req, res) => {
     const { agencyId } = req.params;
     const { status } = req.query;
     
-    let query = db.select({
+    const conditions = [eq(agencyClients.agencyId, parseInt(agencyId))];
+    if (status) {
+      conditions.push(eq(agencyClients.status, status as string));
+    }
+    
+    const clients = await db.select({
       client: agencyClients,
       user: users,
       counselor: vrCounselors
@@ -137,13 +154,8 @@ router.get('/agencies/:agencyId/clients', async (req, res) => {
     .from(agencyClients)
     .leftJoin(users, eq(agencyClients.userId, users.id))
     .leftJoin(vrCounselors, eq(agencyClients.assignedCounselorId, vrCounselors.id))
-    .where(eq(agencyClients.agencyId, parseInt(agencyId)));
-    
-    if (status) {
-      query = query.where(eq(agencyClients.status, status as string)) as any;
-    }
-    
-    const clients = await query.orderBy(desc(agencyClients.referralDate));
+    .where(and(...conditions))
+    .orderBy(desc(agencyClients.referralDate));
     
     res.json({
       success: true,
@@ -198,13 +210,15 @@ router.get('/clients/:id', async (req, res) => {
 router.post('/agencies/:agencyId/clients', async (req, res) => {
   try {
     const { agencyId } = req.params;
-    const clientData = req.body;
+    
+    // Validate input
+    const validatedData = insertAgencyClientSchema.parse({
+      ...req.body,
+      agencyId: parseInt(agencyId)
+    });
     
     const newClient = await db.insert(agencyClients)
-      .values({
-        ...clientData,
-        agencyId: parseInt(agencyId)
-      })
+      .values(validatedData)
       .returning();
     
     res.status(201).json({
@@ -213,6 +227,13 @@ router.post('/agencies/:agencyId/clients', async (req, res) => {
       message: 'Client referral created successfully'
     });
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        details: error.errors
+      });
+    }
     res.status(500).json({
       success: false,
       error: error.message
@@ -296,15 +317,15 @@ router.get('/clients/:clientId/services', async (req, res) => {
     const { clientId } = req.params;
     const { status } = req.query;
     
-    let query = db.select()
-      .from(agencyServices)
-      .where(eq(agencyServices.agencyClientId, parseInt(clientId)));
-    
+    const conditions = [eq(agencyServices.agencyClientId, parseInt(clientId))];
     if (status) {
-      query = query.where(eq(agencyServices.status, status as string)) as any;
+      conditions.push(eq(agencyServices.status, status as string));
     }
     
-    const services = await query.orderBy(desc(agencyServices.createdAt));
+    const services = await db.select()
+      .from(agencyServices)
+      .where(and(...conditions))
+      .orderBy(desc(agencyServices.createdAt));
     
     res.json({
       success: true,
@@ -322,13 +343,15 @@ router.get('/clients/:clientId/services', async (req, res) => {
 router.post('/clients/:clientId/services', async (req, res) => {
   try {
     const { clientId } = req.params;
-    const serviceData = req.body;
+    
+    // Validate input
+    const validatedData = insertAgencyServiceSchema.parse({
+      ...req.body,
+      agencyClientId: parseInt(clientId)
+    });
     
     const newService = await db.insert(agencyServices)
-      .values({
-        ...serviceData,
-        agencyClientId: parseInt(clientId)
-      })
+      .values(validatedData)
       .returning();
     
     res.status(201).json({
@@ -337,6 +360,13 @@ router.post('/clients/:clientId/services', async (req, res) => {
       message: 'Service created successfully'
     });
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        details: error.errors
+      });
+    }
     res.status(500).json({
       success: false,
       error: error.message
@@ -395,7 +425,7 @@ router.get('/agencies/:agencyId/dashboard', async (req, res) => {
     const services = clientIds.length > 0 
       ? await db.select()
           .from(agencyServices)
-          .where(eq(agencyServices.agencyClientId, clientIds[0]))
+          .where(inArray(agencyServices.agencyClientId, clientIds))
       : [];
     
     // Calculate statistics
