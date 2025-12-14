@@ -36,28 +36,31 @@ Our current architecture consists of:
 
 ## Phase 2: API Server Migration to Cloud Run (3-5 days)
 
-### Tasks:
-1. **Containerize API Server**
-   - Create optimized Dockerfile for `api-server-notion.js`
+### ⚠️ Note: Legacy Files Archived
+The standalone `api-server-notion.js` and related files have been archived. The platform now uses a unified server architecture with `server/index.ts` as the main entry point. See `ARCHIVED_FILES.md` for details.
+
+### Current Architecture Tasks:
+1. **Containerize Current Unified Server**
+   - Create optimized Dockerfile for `server/index.ts`
    - Implement multi-stage build for smaller image size
    - Configure memory limits and performance optimizations
 
 ```Dockerfile
-# Example Dockerfile for optimized API server
+# Example Dockerfile for optimized unified server
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 COPY . .
+RUN npm run build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/api-server-notion.js ./
-COPY --from=builder /app/client/dist ./client/dist
+COPY --from=builder /app/dist ./dist
 ENV NODE_ENV=production
 ENV PORT=8080
-CMD ["node", "api-server-notion.js"]
+CMD ["node", "dist/index.js"]
 ```
 
 2. **Cloud Run Setup**
