@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { db } from '../database';
-import { partnerAgencies, agencyClients, agencyServices, users, vrCounselors, insertPartnerAgencySchema, insertAgencyClientSchema, insertAgencyServiceSchema, updatePartnerAgencySchema, updateAgencyClientSchema, updateAgencyServiceSchema } from '../../shared/schema';
-import { eq, and, desc, inArray } from 'drizzle-orm';
+import { partnerAgencies, agencyClients, agencyServices, users, vrCounselors, insertPartnerAgencySchema, insertAgencyClientSchema, insertAgencyServiceSchema, updatePartnerAgencySchema, updateAgencyClientSchema, updateAgencyServiceSchema, assignCounselorSchema } from '../../shared/schema';
+import { eq, and, desc, inArray, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 const router = Router();
@@ -21,12 +21,10 @@ router.get('/agencies', async (req, res) => {
       conditions.push(eq(partnerAgencies.isActive, isActive === 'true'));
     }
     
-    let query = db.select().from(partnerAgencies);
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions)) as any;
-    }
-    
-    const agencies = await query.orderBy(desc(partnerAgencies.partnerSince));
+    const query = db.select().from(partnerAgencies);
+    const agencies = conditions.length > 0
+      ? await query.where(and(...conditions)).orderBy(desc(partnerAgencies.partnerSince))
+      : await query.orderBy(desc(partnerAgencies.partnerSince));
     
     res.json({
       success: true,
@@ -297,7 +295,9 @@ router.put('/clients/:id', async (req, res) => {
 router.post('/clients/:id/assign-counselor', async (req, res) => {
   try {
     const { id } = req.params;
-    const { counselorId } = req.body;
+    
+    // Validate input
+    const { counselorId } = assignCounselorSchema.parse(req.body);
     
     const updatedClient = await db.update(agencyClients)
       .set({
@@ -320,6 +320,13 @@ router.post('/clients/:id/assign-counselor', async (req, res) => {
       message: 'Counselor assigned successfully'
     });
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        details: error.errors
+      });
+    }
     res.status(500).json({
       success: false,
       error: error.message

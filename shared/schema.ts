@@ -284,8 +284,8 @@ export const insertAgencyServiceSchema = createInsertSchema(agencyServices).pick
 });
 
 // Update schemas - only allow specific fields to be updated
-export const updatePartnerAgencySchema = insertPartnerAgencySchema.partial().omit({ 
-  // Omit fields that should never be updated
+export const updatePartnerAgencySchema = insertPartnerAgencySchema.partial().omit({
+  // Omit fields that should never be updated by clients
 });
 
 export const updateAgencyClientSchema = insertAgencyClientSchema.partial().omit({
@@ -295,6 +295,11 @@ export const updateAgencyClientSchema = insertAgencyClientSchema.partial().omit(
 
 export const updateAgencyServiceSchema = insertAgencyServiceSchema.partial().omit({
   agencyClientId: true, // Client cannot be changed after creation
+});
+
+// Schema for assigning counselor to client
+export const assignCounselorSchema = z.object({
+  counselorId: z.number().int().positive()
 });
 
 // Types
