@@ -18,10 +18,15 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   agent-health-check:
     name: Magician Agent Health Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event.inputs.operation == 'health_check' || github.event.inputs.operation == ''
     
     steps:
@@ -111,6 +116,8 @@ jobs:
   agent-performance-audit:
     name: Magician Performance Audit
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event.inputs.operation == 'performance_audit'
     
     steps:
@@ -165,6 +172,8 @@ jobs:
   agent-capacity-planning:
     name: Capacity Planning Analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event.inputs.operation == 'capacity_planning'
     
     steps:
@@ -203,6 +212,8 @@ jobs:
   agent-deployment:
     name: Deploy Magician Service
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event.inputs.operation == 'deploy_magician'
     
     steps:
@@ -245,6 +256,8 @@ jobs:
   emergency-response:
     name: Emergency Response Protocol
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event.inputs.operation == 'emergency_response'
     
     steps:
@@ -289,6 +302,8 @@ jobs:
   operator-coordination:
     name: Operator Coordination Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -320,6 +335,8 @@ jobs:
   platform-metrics:
     name: Platform Metrics Collection
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Collect platform metrics

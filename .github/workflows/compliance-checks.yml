@@ -10,10 +10,15 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   accessibility-audit:
     name: Accessibility Compliance Audit
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -47,6 +52,8 @@ jobs:
   vr-compliance-check:
     name: VR Compliance Validation
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -82,6 +89,8 @@ jobs:
   workforce-compliance-check:
     name: Workforce Solutions Compliance
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -115,6 +124,8 @@ jobs:
   magician-validation:
     name: Magician Services Validation
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -153,6 +164,8 @@ jobs:
   security-audit:
     name: Security and Privacy Audit
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -190,6 +203,8 @@ jobs:
   documentation-check:
     name: Documentation Validation
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -215,6 +230,8 @@ jobs:
   database-schema-validation:
     name: Database Schema Validation
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -254,6 +271,8 @@ jobs:
   compliance-report:
     name: Generate Compliance Report
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [accessibility-audit, vr-compliance-check, workforce-compliance-check, magician-validation, security-audit]
     if: always()
     
