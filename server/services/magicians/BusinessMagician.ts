@@ -602,7 +602,6 @@ class BusinessMagicianService extends BaseMagician {
    */
   private async conductMarketResearch(context: MagicianContext, params: any): Promise<any> {
     const targetMarket = params.targetMarket || 'general';
-    const businessType = params.businessType || 'service';
     
     // This would use AI and real data in production
     const research = {
