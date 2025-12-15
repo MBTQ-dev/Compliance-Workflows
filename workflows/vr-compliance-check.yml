@@ -231,7 +231,7 @@ jobs:
       - name: Create report artifact
         run: |
           mkdir -p reports
-          cat > reports/vr-compliance-report.txt << 'EOFR'
+          cat > reports/vr-compliance-report.txt << EOFR
           VR COMPLIANCE VALIDATION REPORT
           ================================
           

@@ -2,6 +2,8 @@
 
 This directory contains modular, reusable workflow templates that can be copied into any project to add compliance checking, accessibility auditing, security validation, and more.
 
+> **Note**: The workflows use `npm ci --legacy-peer-deps` due to a known peer dependency conflict between Vite 7.x and @vitejs/plugin-react 4.x in the Magician Platform. When adapting these workflows for your own project, you may not need this flag if your dependencies are compatible.
+
 ## 📁 Available Workflows
 
 ### VR Compliance Workflows

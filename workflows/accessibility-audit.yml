@@ -251,7 +251,7 @@ jobs:
       - name: Generate accessibility report
         run: |
           mkdir -p reports
-          cat > reports/accessibility-report.md << 'EOFR'
+          cat > reports/accessibility-report.md << EOFR
           # Accessibility Audit Report
           
           **Date:** $(date)
