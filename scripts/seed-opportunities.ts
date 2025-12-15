@@ -8,6 +8,11 @@
 import { DatabaseStorage } from '../server/database';
 import type { InsertOpportunity } from '../shared/schema';
 
+// Helper function to convert Date to date string (YYYY-MM-DD)
+function toDateString(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+
 async function seedOpportunities() {
   const db = new DatabaseStorage();
 
@@ -21,7 +26,7 @@ async function seedOpportunities() {
       requiredFibonrose: 100,
       targetAudience: ['asl_user', 'deaf'],
       budget: '$500',
-      deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 2 weeks from now
+      deadline: toDateString(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)), // 2 weeks from now
       location: 'remote',
       contactEmail: 'jobs@mbtq.example.com',
       contactName: 'MBTQ Hiring Team',
@@ -51,7 +56,7 @@ async function seedOpportunities() {
       requiredFibonrose: 150,
       targetAudience: ['deaf', 'entrepreneur'],
       budget: 'Up to $5,000',
-      deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+      deadline: toDateString(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)), // 30 days from now
       location: 'remote',
       externalUrl: 'https://dao.mbtq.example.com/grants',
       isActive: true,
@@ -66,7 +71,7 @@ async function seedOpportunities() {
       requiredFibonrose: 50,
       targetAudience: ['entrepreneur', 'deaf'],
       location: 'hybrid',
-      deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
+      deadline: toDateString(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)), // 1 week from now
       externalUrl: 'https://learn.mbtq.example.com/workshops',
       isActive: true,
       priority: 12,
@@ -80,7 +85,7 @@ async function seedOpportunities() {
       requiredFibonrose: 75,
       targetAudience: ['deaf', 'entrepreneur'],
       location: 'Seattle, WA',
-      deadline: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000), // 3 weeks from now
+      deadline: toDateString(new Date(Date.now() + 21 * 24 * 60 * 60 * 1000)), // 3 weeks from now
       contactEmail: 'events@mbtq.example.com',
       isActive: true,
       priority: 8,
@@ -108,7 +113,7 @@ async function seedOpportunities() {
       targetAudience: ['deaf', 'asl_user'],
       budget: '$1,200',
       location: 'remote',
-      deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days from now
+      deadline: toDateString(new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)), // 10 days from now
       contactEmail: 'consulting@tech-company.example.com',
       isActive: true,
       priority: 14,
@@ -149,7 +154,7 @@ async function seedOpportunities() {
       requiredFibonrose: 250,
       targetAudience: ['entrepreneur', 'business_owner'],
       budget: 'Up to $25,000',
-      deadline: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000), // 45 days from now
+      deadline: toDateString(new Date(Date.now() + 45 * 24 * 60 * 60 * 1000)), // 45 days from now
       externalUrl: 'https://sba.gov/grants',
       isActive: true,
       priority: 25,

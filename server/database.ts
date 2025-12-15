@@ -15,7 +15,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { IStorage } from "./storage";
-import { and, eq, isNull, or, sql, gte, lte, desc, arrayOverlaps } from "drizzle-orm";
+import { and, eq, isNull, or, sql, gte, lte, desc } from "drizzle-orm";
 import { hashPassword } from "./utils/passwordUtils";
 
 export class DatabaseStorage implements IStorage {
@@ -398,8 +398,7 @@ export class DatabaseStorage implements IStorage {
     type?: string;
     category?: string;
     tags?: string[];
-    minFibonrose?: number;
-    maxFibonrose?: number;
+    userFibonroseScore?: number; // User's Fibonrose score - only show opportunities they qualify for
     targetAudience?: string[];
     isActive?: boolean;
   }): Promise<Opportunity[]> {
@@ -415,12 +414,9 @@ export class DatabaseStorage implements IStorage {
       conditions.push(eq(opportunities.category, params.category));
     }
     
-    if (params?.minFibonrose !== undefined) {
-      conditions.push(lte(opportunities.requiredFibonrose, params.minFibonrose));
-    }
-    
-    if (params?.maxFibonrose !== undefined) {
-      conditions.push(gte(opportunities.requiredFibonrose, params.maxFibonrose));
+    // Filter opportunities that user qualifies for (requiredFibonrose <= userScore)
+    if (params?.userFibonroseScore !== undefined) {
+      conditions.push(lte(opportunities.requiredFibonrose, params.userFibonroseScore));
     }
     
     if (params?.isActive !== undefined) {
