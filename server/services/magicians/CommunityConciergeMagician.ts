@@ -390,7 +390,7 @@ export class CommunityConciergeMagician extends BaseMagician {
       // Build query parameters based on user profile and interests
       const queryParams: any = {
         isActive: true,
-        minFibonrose: userScore, // Only show opportunities user qualifies for
+        userFibonroseScore: userScore, // Only show opportunities user qualifies for
       };
 
       if (params.category) {
