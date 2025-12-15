@@ -69,13 +69,13 @@ jobs:
           npm audit --audit-level=moderate || echo "Vulnerabilities found - review required"
           npm audit --json > npm-audit-report.json || true
       
-      - name: Check for critical vulnerabilities
+      - name: Check for high severity vulnerabilities
         run: |
-          echo "Checking for critical and high severity vulnerabilities..."
+          echo "Checking for high severity vulnerabilities..."
           if npm audit --audit-level=high; then
-            echo "✓ No critical or high severity vulnerabilities"
+            echo "✓ No high severity vulnerabilities"
           else
-            echo "⚠ Critical or high severity vulnerabilities detected"
+            echo "⚠ High severity vulnerabilities detected"
             exit 1
           fi
       
@@ -310,7 +310,7 @@ jobs:
       - name: Generate security report
         run: |
           mkdir -p reports
-          cat > reports/security-report.md << 'EOFR'
+          cat > reports/security-report.md << EOFR
           # Security Audit Report
           
           **Date:** $(date)

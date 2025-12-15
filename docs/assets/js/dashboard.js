@@ -130,16 +130,22 @@ function animateLifecycleCards() {
     });
 }
 
-// Simulate real-time data updates (demo purposes)
+// ============================================================
+// DEMO DATA SIMULATION
+// ============================================================
+// NOTE: This section simulates real-time data updates for demo purposes.
+// In a production environment, replace this with actual API calls
+// to fetch real compliance data from your backend.
+// ============================================================
 setInterval(() => {
-    // Update random stats slightly
+    // Simulate minor fluctuations in enrollment numbers (demo only)
     const enrollments = document.getElementById('totalEnrollments');
     if (enrollments && Math.random() > 0.7) {
         const currentValue = parseInt(enrollments.textContent);
         enrollments.textContent = (currentValue + Math.floor(Math.random() * 3 - 1)).toString();
     }
     
-    // Update random progress bars
+    // Simulate progress bar updates (demo only)
     const progressBars = document.querySelectorAll('.progress-fill');
     progressBars.forEach(bar => {
         if (Math.random() > 0.8) {
