@@ -77,6 +77,21 @@ All services are built with deaf-first accessibility and maintain strict complia
    - Marketing strategy
    - Accessibility design
 
+## 🎯 Deno + Supabase Integration (New!)
+
+The platform now supports **dual runtime environments**:
+- **Node.js Backend**: Existing Express server for production workloads
+- **Deno Application**: Modern, secure runtime with Supabase integration
+
+### Modular Trio Components
+
+1. **DeafAuth** 🔐 - Supabase-powered authentication with OAuth support
+2. **PinkSync** ⚡ - Real-time communication and accessibility optimization
+3. **FibonRose** ⭐ - Fibonacci-based reputation and trust scoring
+4. **PinkFlow** ✅ - Automated testing and workflow validation
+
+👉 **[Read the complete Deno & Supabase Integration Guide](./DENO_SUPABASE_GUIDE.md)**
+
 ## 🚀 Key Features
 
 ### Vocational Rehabilitation Compliance
