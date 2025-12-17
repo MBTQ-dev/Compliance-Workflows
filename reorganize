@@ -1,4 +1,4 @@
-# 360Magicians Monorepo Starter
+# 360Magicians 
 
 This repo contains all codebases, OpenAPI docs, and CI/CD for the 360Magicians platform.
 
@@ -31,10 +31,10 @@ openapi/
 3. Serve docs locally:  
    `npx serve .` or `python3 -m http.server`  
    Then visit: `http://localhost:5000/docs/swagger/`
-4. Push to GitHub. Vercel will deploy each app via monorepo configuration.
+4. Push to GitHub.  
 5. [Optional] Use `/docs/swagger` as your API docs site.
 
 ## Deployment
 
-- This repo is ready to deploy with Cloud Run and GitHub Actions.
+- This repo is ready to deploy with GitHub Actions.
 - See `.github/workflows/deploy.yml` for CI/CD config.
