@@ -4,12 +4,12 @@ This directory contains the GitHub Pages documentation site for the MBTQ Platfor
 
 ## Structure
 
-- **index.html** - Main MBTQ Platform landing page
+- **index.html** - Main MBTQ Platform landing page (auto-published to GitHub Pages)
   - Overview of the three-pillar architecture (DeafAUTH, PinkSync, Fibonrose)
   - Integration entry points and instructions
   - Organization map of all repos
   
-- **platform.html** - Source for the platform page (same as index.html)
+- **platform.html** - Source file for the platform page (kept as backup/reference)
 
 - **old-magician-platform-index.html** - Legacy Magician Platform documentation (archived)
 
