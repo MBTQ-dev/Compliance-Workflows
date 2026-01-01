@@ -448,9 +448,11 @@
                 generated_at: new Date().toISOString()
             };
             
-            document.getElementById('blueprintResponse').innerHTML = 
-                '<strong>Blueprint Generated Successfully!</strong><br><br>' +
-                JSON.stringify(mockResponse, null, 2);
+            const blueprintContainer = document.getElementById('blueprintResponse');
+            blueprintContainer.innerHTML = '<strong>Blueprint Generated Successfully!</strong><br><br>';
+            const blueprintPre = document.createElement('pre');
+            blueprintPre.textContent = JSON.stringify(mockResponse, null, 2);
+            blueprintContainer.appendChild(blueprintPre);
         }
         
         function setupGoogleWorkspace() {
@@ -477,9 +479,11 @@
                 ]
             };
             
-            document.getElementById('blueprintResponse').innerHTML = 
-                '<strong>Google Workspace Setup Initiated!</strong><br><br>' +
-                JSON.stringify(mockResponse, null, 2);
+            const blueprintContainer = document.getElementById('blueprintResponse');
+            blueprintContainer.innerHTML = '<strong>Google Workspace Setup Initiated!</strong><br><br>';
+            const workspacePre = document.createElement('pre');
+            workspacePre.textContent = JSON.stringify(mockResponse, null, 2);
+            blueprintContainer.appendChild(workspacePre);
         }
         
         function calculateCosts() {
